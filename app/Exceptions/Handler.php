@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Traits\ApiResponses;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -44,5 +45,39 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Throwable $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
+     */
+    public function render($request, Throwable $e)
+    {
+        if ($request->is('api/*')) {
+            $statusCode = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
+
+            $error = [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data' => null,
+            ];
+
+            if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                $error['message'] = 'Model doesn\'t exist';
+            }
+
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+                $error['errors'] = $e->errors();
+            }
+
+            return response()->json($error, $statusCode);
+        }
+
+        return parent::render($request, $e);
     }
 }
