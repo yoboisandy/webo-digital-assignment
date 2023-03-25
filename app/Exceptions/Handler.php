@@ -68,7 +68,7 @@ class Handler extends ExceptionHandler
             ];
 
             if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
-                $error['message'] = 'Model doesn\'t exist';
+                $error['message'] = 'Data doesn\'t exist.';
             }
 
             if ($e instanceof \Illuminate\Validation\ValidationException) {
