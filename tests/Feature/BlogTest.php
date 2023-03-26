@@ -7,7 +7,6 @@ use App\Models\BlogCategory;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 use Illuminate\Support\Str;
-use Tests\DataProviders\DataProviders;
 
 class BlogTest extends TestCase
 {
@@ -53,7 +52,6 @@ class BlogTest extends TestCase
 
         $this->assertEquals($blog->fresh()->title, $title);
     }
-
 
     /**
      * Test if all blogs are listed.
@@ -144,7 +142,7 @@ class BlogTest extends TestCase
      */
     public function test_does_not_store_and_update_blog_with_invalid_data($invalidData, $invalidFields): void
     {
-        $blogCategory = BlogCategory::factory()->create();
+        BlogCategory::factory()->create();
         $response = $this->postJson(route('blogs.storeOrUpdate'), $invalidData);
 
         $response->assertStatus(500);

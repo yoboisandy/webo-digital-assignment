@@ -99,6 +99,10 @@ class BlogCategoryTest extends TestCase
         $this->assertEquals(BlogCategory::count(), 0);
     }
 
+    /**
+     * Test if the blog category is not shown when accessing non existing category.
+     * @return void
+     */
     public function test_returns_error_response_when_accessing_non_existing_category()
     {
         $response = $this->getJson(route('blog-categories.show', 1));
