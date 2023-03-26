@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 // blog categories
 Route::apiResource('blog-categories', \App\Http\Controllers\BlogCategoryController::class);
+
+// blog
+Route::name('blogs.')->group(function () {
+    Route::get('blogs', [\App\Http\Controllers\BlogController::class, 'index'])->name('index');
+    Route::get('blogs/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('show');
+    Route::post('blogs', [\App\Http\Controllers\BlogController::class, 'storeOrUpdate'])->name('storeOrUpdate');
+    Route::delete('blogs/{blog}', [\App\Http\Controllers\BlogController::class, 'destroy'])->name('destroy');
+    Route::get('blogs/category/{blogCategory}',  [\App\Http\Controllers\BlogController::class, 'showByCategory'])->name('blogsByCategory');
+});

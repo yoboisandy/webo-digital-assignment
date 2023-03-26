@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Http\Resources\BlogCategoryResource;
 use App\Models\BlogCategory;
 use Tests\TestCase;
-use Illuminate\Support\Str;
 
 class BlogCategoryTest extends TestCase
 {
@@ -119,8 +118,9 @@ class BlogCategoryTest extends TestCase
 
     /**
      * Test if the blog category is not stored with invalid data.
-     * @dataProvider invalidBlogCategoriesData
-     * @param array $invalidBlogCategoriesData
+     * @dataProvider Tests\DataProviders\BlogDataProviders::invalidBlogCategoriesData
+     * @param array $invalidData
+     * @param array $invalidFields
      * @return void
      */
     public function test_does_not_store_or_update_blog_category_with_invalid_data($invalidData, $invalidFields): void
@@ -143,29 +143,5 @@ class BlogCategoryTest extends TestCase
         $response->assertJsonValidationErrors($invalidFields);
 
         $this->assertEquals(BlogCategory::first()->name, $blogCategory->name);
-    }
-
-    public function invalidBlogCategoriesData()
-    {
-        return [
-            "name is required" => [
-                [
-                    'name' => '',
-                ],
-                ['name']
-            ],
-            "name should be string" => [
-                [
-                    'name' => 123,
-                ],
-                ['name']
-            ],
-            "name should be max 255 characters" => [
-                [
-                    'name' => Str::random(256),
-                ],
-                ['name']
-            ]
-        ];
     }
 }

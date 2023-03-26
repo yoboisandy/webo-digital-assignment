@@ -21,8 +21,14 @@ class BlogCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = ($this->route('blog_category')?->id);
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => [
+                'required',
+                'string',
+                'unique:blog_categories,name' . ($id ? ',' . $id : ''),
+                'max:255'
+            ],
         ];
     }
 }
